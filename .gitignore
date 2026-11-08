@@ -1,0 +1,20 @@
+# Never commit env values or secrets — even by accident
+.env
+.env.*
+*.env
+*.key
+*.pem
+*.p12
+secrets/
+credentials.*
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+
+# Working scratch (shouldn't be here, but belt + braces)
+*.tmp
+*.log
