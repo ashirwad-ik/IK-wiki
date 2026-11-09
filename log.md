@@ -12,3 +12,5 @@ Verbs: `seed`, `learn`, `fix`, `lint`, `rename`, `archive`.
 ## [2026-11-08] seed | services | cognito, livekit, sentinel, s3, dynamodb, sentry stubs
 ## [2026-11-08] seed | integrations | fe-be-contract from cross-repo onboarding doc
 ## [2026-11-08] seed | env | registry + naming traps (AWS_ACCESS_KEY_ID_1 suffix, FE committed .env.*)
+## [2026-11-09] learn | ik-ai-mock-interview-fe | INV-1156 feedback form moved to report page; feedback-status gate; localhost cookie limit; gh account method
+## [2026-11-09] learn | integrations | FE no-user route shape vs BE /user/{id} routes; feedback-status short-path alias (INV-1157)

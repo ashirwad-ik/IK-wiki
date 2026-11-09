@@ -55,3 +55,11 @@ Don't disable husky. Install before first commit if needed (`npm install` wires 
 - [ ] `npm run build` succeeds locally.
 - [ ] No new secret pasted into `.env.*` (those files are tracked — see [`gotchas.md`](gotchas.md)).
 - [ ] If backend contract changed, update [`../../integrations/fe-be-contract.md`](../../integrations/fe-be-contract.md).
+
+## GitHub CLI account (applies to all IK repos)
+
+Use the matching account per call; do not switch the global `gh` account.
+
+- `GH_ACCOUNT=...` is silently ignored by the installed `gh`. Do not rely on it.
+- `gh auth switch` changes global state. Do not use it.
+- Working form: `GH_TOKEN="$(gh auth token --user ashirwad-ik)" gh pr create ...` (single call, no persistence).

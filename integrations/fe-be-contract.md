@@ -57,7 +57,12 @@ Prefixed with `/api/v1/ai_mock_interview` on the BE; called via `src/apis/*` hoo
 | `useGetTranscript` | `GET /interview/{id}/transcript` | S3-backed |
 | `useGetReportByIdApi` | `GET /interview/{id}/report` | DynamoDB-backed |
 | terminate/feedback/rating | `PATCH|POST .../terminate`, `POST .../feedback`, `POST .../rating` | |
+| `useGetFeedbackStatusApi` (INV-1156) | `GET /interview/{id}/feedback-status` | Added on BE by INV-1157 as a short-path alias; identity from auth cookie. Gates the report page; fails open. |
 | topics | `GET /topics?round=` | |
+
+### Route-shape mismatch (no user segment on FE)
+
+The FE calls the interview routes without the `/user/{user_id}` segment (rating, report, feedback-status). The BE code defines these routes under `/user/{user_id}/interview/{id}/...`. The deployed QA backend accepts the FE shape, most likely through a gateway rewrite or older routing. A raw local BE does not, so FE and local BE only align after the INV-1157 alias. Treat the no-user shape as the contract the FE depends on; do not remove the alias without checking QA routing first.
 
 **When extending:** add the FE hook under `src/apis/`, register the URL in `src/constants/apiConstants.ts`, and add the matching BE route in `routers/ai_mock_interview_router.py`. Keep this table in sync.
 

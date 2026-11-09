@@ -65,6 +65,13 @@ sequenceDiagram
 - Non-authoritative client mirror in `localStorage.auth_state`, `sessionStorage.auth_user`, `guest_sub` (for `X-Guest-Sub`).
 - Logout clears storage + `redirectToLogout()`.
 
+## Feedback form on the report page (INV-1156)
+
+- Normal interview end routes to `/report/{roomId}`. The feedback form (`FeedbackModalWithRating`) is shown as a popup over a blurred report. The report is revealed only after submit (`useSubmitRatingApi`).
+- `useGetFeedbackStatusApi` (GET feedback-status) decides whether to gate the report. It fails open: if status is unknown, the form is shown.
+- Invite flow (`isInviteFlow`) keeps the on-session feedback and thank-you screen.
+- Backed by INV-1157 on the BE (`feedback-status` endpoint, with a short-path alias).
+
 ## Role routing (`src/app/page.tsx`)
 
 - `RECRUITER` → `/hr-dashboard`

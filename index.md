@@ -38,7 +38,7 @@ The catalog. One line per page. Browse here first.
 
 ## Tickets
 
-- *(empty — live tickets appear here after PR raise; distilled + archived on Done)*
+- [`tickets/INV-1156.md`](tickets/INV-1156.md) — FE feedback form moved onto report page (PR #17, related to INV-1157 BE).
 
 ## Operational
 

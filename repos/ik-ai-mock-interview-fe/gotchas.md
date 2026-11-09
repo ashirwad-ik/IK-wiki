@@ -36,6 +36,14 @@ Even without changing deps, `npm install` can shuffle the lockfile. If you weren
 
 `@sentry/cli`, `@tailwindcss/oxide`, `fsevents`, `sharp`, `unrs-resolver`. npm warns; install still succeeds and the app runs.
 
+## Real login does not work on localhost (cookie domain)
+
+The Sentinel session cookie is scoped to `.interviewkickstart.com`, so browsers will not store or send it on `localhost`. Local FE therefore cannot log in for real, whichever BE it points at. For local UI checks only, the "logged-in" state can be seeded in browser storage (`auth_state`, `auth_user`, `auth_api_called`) so the provider treats the session as authenticated with no backend call. Verify full flows on a deployed `*.interviewkickstart.com` environment. Seeded values are not secrets; never put a real token in them.
+
+## FE uses no-user-segment API paths
+
+FE calls `/interview/{id}/...` (rating, report, feedback-status) without the `/user/{user_id}` segment that the BE code routes use. QA accepts the FE shape. A raw local BE does not, unless it has the short-path alias added in INV-1157. See [`../../integrations/fe-be-contract.md`](../../integrations/fe-be-contract.md).
+
 ## Fully client-rendered
 
 Every page is `'use client'`. No server fetching, no server actions, no `app/api`. SEO + first-byte perf implications. Don't try to add a server component expecting data fetching to "just work" there without wiring.
