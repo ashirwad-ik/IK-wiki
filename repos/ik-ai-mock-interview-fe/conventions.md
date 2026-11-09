@@ -30,10 +30,12 @@ Release flow is in [`../../workflows/release-flow.md`](../../workflows/release-f
 
 ## CI and deploy
 
-- Deploy is **Vercel** (`vercel-deploy`): auto on push to `qa` and `production`, also workflow_dispatch.
-- `automation-testing-gate` is a required check. "Expected — waiting for status" is normal until the tool reports.
-- No `.github/workflows/` in-repo for FE. Gating is in GitHub settings and Vercel.
-- **Open question for manager:** does `vercel-deploy` live in the org's shared workflows, and who owns `automation-testing-gate`?
+- Workflow file is **in-repo**: `.github/workflows/vercel-deploy.yml`. It is not org-shared. (An earlier note said there were no workflows in-repo; that was wrong, corrected 2026-11-09.)
+- Triggers: auto on push to `qa` and `production`, plus workflow_dispatch. The `production` branch maps to `--prod`.
+- Jobs: `deploy` (Vercel pull, build, deploy) and `e2e`. The Vercel deploy step runs only when `MIGRATION_CUTOVER` is `true`; otherwise it is shadow mode and nothing deploys.
+- `e2e` fires the `automation-testing-gate` check through the test-automation repo's `post-deploy-e2e.yml`, using a GitHub App (`AUTOMATION_TESTING_TRIGGER_APP_ID`). It runs only after a real deploy. On `qa` it runs the full QA suite. On `production` it runs only the QA team's smoke check.
+- "Expected — waiting for status" on an FE PR means the gate has not been reported yet. Usually no real deploy has run for that commit.
+- **Answered 2026-11-09:** `automation-testing-gate` is produced by the test-automation repo. Its trigger is the `e2e` job in each repo's deploy workflow, and the plan is attributed to Dipen in the workflow comments. Still unconfirmed: whether a production PR's gate on a cherry-picked SHA clears from the QA run. Same open flag as the BE; see [`../../workflows/release-flow.md`](../../workflows/release-flow.md).
 
 ## Tooling
 

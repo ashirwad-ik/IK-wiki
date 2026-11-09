@@ -33,7 +33,7 @@ Use `session_manager` from `database/session_layer.py`. **Never construct a raw 
 
 ## `MIGRATION_CUTOVER` controls whether deploys actually deploy
 
-When the repo variable is `false`, dispatched `deploy-*` workflows run in shadow mode (image tagged `shadow-<sha>`, no ECS update). A green dispatch is not proof of a real deploy. Confirm the variable's current state before assuming.
+When the repo variable is `false`, dispatched `deploy-*` workflows run in shadow mode (image tagged `shadow-<sha>`, no ECS update). A green dispatch is not proof of a real deploy. Confirm the variable's current state before assuming. It also decides whether `automation-testing-gate` fires: shadow `deploy-qa` leaves the gate "Expected" forever. See [`../../workflows/release-flow.md`](../../workflows/release-flow.md).
 
 ## README is stale in places
 

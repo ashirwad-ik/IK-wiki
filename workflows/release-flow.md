@@ -32,10 +32,31 @@ Applies to `ik-ai-mock-interview-fe` and `ik-ai-mock-interview-be`. Confirmed by
 
 ## Checks and deploy behaviour
 
-- **`automation-testing-gate`** is a required status check. "Expected — waiting for status to be reported" is normal. It clears when the automation-testing tool reports, usually around review time.
-- **FE deploy:** `vercel-deploy`, auto on push to `qa` and `production`, also workflow_dispatch.
-- **BE deploy:** ECS via the workflows in [`../repos/ik-ai-mock-interview-be/conventions.md`](../repos/ik-ai-mock-interview-be/conventions.md). Check the `MIGRATION_CUTOVER` variable before assuming a deploy is real.
-- QA and production actions are **manually triggered** after review. Nothing deploys on merge alone for BE.
+- **`automation-testing-gate`** is a required status check, reported by the QA team's post-deploy tests (test-automation repo, `post-deploy-e2e.yml`). An `e2e` job in each repo's deploy workflow fires it, and only after a deploy that really ran (see `MIGRATION_CUTOVER` below). "Expected — waiting for status to be reported" means no real deploy has fired it yet. It is not an error. See "Backend CI workflows & the gate" below.
+- **FE deploy:** `vercel-deploy` (in-repo, `.github/workflows/vercel-deploy.yml`), auto on push to `qa` and `production`, also workflow_dispatch. Its `e2e` job fires the gate on both branches.
+- **BE deploy:** ECS via the workflows below and in [`../repos/ik-ai-mock-interview-be/conventions.md`](../repos/ik-ai-mock-interview-be/conventions.md).
+- **`MIGRATION_CUTOVER`** (repo variable, both repos): when not `true`, deploy runs in shadow mode. No deploy happens, and the gate does not fire. A green dispatch is not proof of a real deploy.
+- QA and production actions are **manually triggered** after review for BE. Nothing deploys on merge alone for BE.
+
+### Backend CI workflows & the gate
+
+Verified from `.github/workflows/` in `ik-ai-mock-interview-be` (2026-11-09).
+
+| Workflow | Ref | Does | Fires the gate? |
+|---|---|---|---|
+| `build-qa` | `qa` | Build and push the image to ECR. | No |
+| `deploy-qa` | `qa` | Update QA ECS. Its `e2e` job then starts the QA tests. | **Yes**, only if the deploy really ran |
+| `build-prod` | `production` | Build and push the production image. | No |
+| `deploy-production` | `production` | Update production ECS. | No |
+
+Order for a backend release: **build-qa → deploy-qa → test on QA → review and approval → build-prod → deploy-production**.
+
+Consequences:
+- Running `build-qa` alone leaves the gate "Expected" forever. Run `deploy-qa` too.
+- If `MIGRATION_CUTOVER` is not `true`, `deploy-qa` runs in shadow mode and the gate does not fire.
+- No production workflow fires the gate. The production PR's gate depends on the QA run (see the flag below).
+
+**Open flag (not verified, confirm with the gate owner, Dipen):** the gate reports on the deployed commit SHA. The production PR branch is a separately cherry-picked commit with a different SHA. It is unconfirmed whether the production PR's required gate clears from the QA e2e result or needs a separate run.
 
 ## Jira status mapping
 

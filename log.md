@@ -16,3 +16,5 @@ Verbs: `seed`, `learn`, `fix`, `lint`, `rename`, `archive`.
 ## [2026-11-09] learn | integrations | FE no-user route shape vs BE /user/{id} routes; feedback-status short-path alias (INV-1157)
 ## [2026-11-09] learn | workflow | QA-first release flow (feature to qa, QA test, then production is live; main unused); apiConstants cherry-pick gotcha; INV-1156/1157 In Review
 ## [2026-11-09] lint | fe + be repos | default-branch lines said main; corrected to production-live. Notion-vs-manager main contradiction flagged, not resolved
+## [2026-11-09] learn | workflow + be | backend deploy-qa fires automation-testing-gate via e2e job (only if real deploy); build-qa does not; prod workflows do not
+## [2026-11-09] lint | fe | FE conventions said no in-repo workflows; corrected (vercel-deploy.yml is in-repo, fires gate on qa and production). Open question on gate ownership answered in part
