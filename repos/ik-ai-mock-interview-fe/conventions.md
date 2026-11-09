@@ -20,15 +20,20 @@ Don't disable husky. Install before first commit if needed (`npm install` wires 
 
 ## Branches
 
-- `main` — default.
-- `qa` — integration branch (observed in merge history).
-- Feature branches: one per ticket, named with the ticket key.
+Release flow is in [`../../workflows/release-flow.md`](../../workflows/release-flow.md). Summary (confirmed 2026-11-09):
+
+- `production` — **live**. The target of the final release PR.
+- `qa` — integration and QA environment. Feature PRs merge here first.
+- `main` — **not used as a release target** for this repo. Ignore it. (Open contradiction with the Notion context page; see the workflows page.)
+- Feature branches: one per ticket, named with the ticket key. Base the QA branch on `origin/qa` and the production branch on `origin/production`. The two have diverged.
 - Merge history is GitLab-style (migrated).
 
-## CI
+## CI and deploy
 
-- **No `.github/workflows/` in-repo.** Gating happens elsewhere.
-- **Open question for manager:** where CI runs, what gates a merge, whether `qa` is the integration target before `main`.
+- Deploy is **Vercel** (`vercel-deploy`): auto on push to `qa` and `production`, also workflow_dispatch.
+- `automation-testing-gate` is a required check. "Expected — waiting for status" is normal until the tool reports.
+- No `.github/workflows/` in-repo for FE. Gating is in GitHub settings and Vercel.
+- **Open question for manager:** does `vercel-deploy` live in the org's shared workflows, and who owns `automation-testing-gate`?
 
 ## Tooling
 

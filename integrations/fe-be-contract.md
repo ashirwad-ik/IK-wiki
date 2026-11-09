@@ -57,7 +57,7 @@ Prefixed with `/api/v1/ai_mock_interview` on the BE; called via `src/apis/*` hoo
 | `useGetTranscript` | `GET /interview/{id}/transcript` | S3-backed |
 | `useGetReportByIdApi` | `GET /interview/{id}/report` | DynamoDB-backed |
 | terminate/feedback/rating | `PATCH|POST .../terminate`, `POST .../feedback`, `POST .../rating` | |
-| `useGetFeedbackStatusApi` (INV-1156) | `GET /interview/{id}/feedback-status` | Added on BE by INV-1157 as a short-path alias; identity from auth cookie. Gates the report page; fails open. |
+| `useGetFeedbackStatusApi` (INV-1156) | `GET /interview/{id}/feedback-status` | Added on BE by INV-1157 as a short-path alias; identity from auth cookie. Gates the report page; fails open. Live on QA (BE QA PR #28 merged to `qa`); production PR #27 in review. |
 | topics | `GET /topics?round=` | |
 
 ### Route-shape mismatch (no user segment on FE)

@@ -4,7 +4,7 @@ AI Mock Interview **backend** service. FastAPI app that owns the mock-interview 
 
 - **Remote:** `git@github-ik:ikickstart/ik-ai-mock-interview-be.git`
 - **Workspace:** `~/Desktop/IK/code/ik-ai-mock-interview-be/`
-- **Default branch:** `main` · `qa` and `production` are deploy branches.
+- **Release branches:** `production` (live) and `qa` (integration). `main` is not used as a release target. See [`../../workflows/release-flow.md`](../../workflows/release-flow.md).
 - **Runtime:** container on AWS ECS (us-west-1, cluster `IK-COMMON`). Readme mention of Lambda is stale.
 
 ## Stack

@@ -44,6 +44,14 @@ The Sentinel session cookie is scoped to `.interviewkickstart.com`, so browsers 
 
 FE calls `/interview/{id}/...` (rating, report, feedback-status) without the `/user/{user_id}` segment that the BE code routes use. QA accepts the FE shape. A raw local BE does not, unless it has the short-path alias added in INV-1157. See [`../../integrations/fe-be-contract.md`](../../integrations/fe-be-contract.md).
 
+## `src/constants/apiConstants.ts` conflicts on cherry-pick (recurring)
+
+production/qa refactored endpoints into a `buildEndpoints(brand)` function exposed via a `get ENDPOINTS()` getter. Older feature commits still carry a flat `const ENDPOINTS = {...}` block that references module-level `BASE_URL` / `RECRUITER_BASE_URL`, which no longer exist at module scope.
+
+- When cherry-picking or resolving a conflict in this file, **add new endpoint constants inside `buildEndpoints`** and **drop the flat `ENDPOINTS` block**.
+- Keeping the flat block breaks `tsc`. Verify with `npx tsc --noEmit`.
+- Context: this happens whenever a feature branch is re-applied onto `origin/production`. See [`../../workflows/release-flow.md`](../../workflows/release-flow.md).
+
 ## Fully client-rendered
 
 Every page is `'use client'`. No server fetching, no server actions, no `app/api`. SEO + first-byte perf implications. Don't try to add a server component expecting data fetching to "just work" there without wiring.
@@ -56,7 +64,7 @@ Every page is `'use client'`. No server fetching, no server actions, no `app/api
 - Node version for CI/prod.
 - LiveKit secrets on the client — remove?
 - `NEXT_PUBLIC_API_KEY` — what it is, where issued, why empty in dev/prod but set in `.env.local`.
-- CI location + merge gate.
+- Merge gate: `automation-testing-gate` is required; still need to confirm who owns it. CI location is now answered (Vercel deploy, see workflows page).
 - Testing policy (Vitest expected?).
 - Mobile support plans.
 - npm audit vulnerabilities — fix or accept?

@@ -12,9 +12,13 @@ Observed format from `git log`: `type TICKET-KEY: subject`, e.g. `chore PF-9: ..
 
 ## Branches
 
-- `main` — default.
-- `qa`, `production` — deploy branches, both gated by `workflow_dispatch`.
-- Feature work: one branch per ticket (seen `PF-9-sync-main-qa-workflows` style).
+Release flow is in [`../../workflows/release-flow.md`](../../workflows/release-flow.md). Summary (confirmed 2026-11-09):
+
+- `production` — **live**. The target of the final release PR.
+- `qa` — integration and QA environment. Feature PRs merge here first.
+- `main` — **not used as a release target** for this repo. Ignore it. (Open contradiction with the Notion context page; see the workflows page.)
+- Both deploy branches are gated by `workflow_dispatch`.
+- Feature work: one branch per ticket, named with the ticket key. Base QA branches on `origin/qa` and production branches on `origin/production`. They have diverged.
 
 ## PRs
 

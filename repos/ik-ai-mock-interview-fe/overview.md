@@ -4,7 +4,7 @@ AI Mock Interview **frontend**. Next.js 15 App Router application, but effective
 
 - **Remote:** `git@github-ik:ikickstart/ik-ai-mock-interview-fe.git`
 - **Workspace:** `~/Desktop/IK/code/ik-ai-mock-interview-fe/`
-- **Default branch:** `main` (+ `qa`).
+- **Release branches:** `production` (live) and `qa` (integration). `main` is not used as a release target. See [`../../workflows/release-flow.md`](../../workflows/release-flow.md).
 
 ## Stack
 

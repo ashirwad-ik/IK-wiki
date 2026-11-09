@@ -15,6 +15,10 @@ The catalog. One line per page. Browse here first.
 - [`repos/ik-ai-mock-interview-fe/integrations.md`](repos/ik-ai-mock-interview-fe/integrations.md) — what the frontend talks to.
 - [`repos/ik-ai-mock-interview-fe/gotchas.md`](repos/ik-ai-mock-interview-fe/gotchas.md) — tracked `.env.*`, mobile gate, secret exposure.
 
+## Workflow & references
+
+- [`workflows/release-flow.md`](workflows/release-flow.md) — QA-first release flow (feature → `qa` → QA test → `production`), branch-base rule, Jira mapping, and link to the Notion context page.
+
 ## Services (shared externals)
 
 - [`services/cognito.md`](services/cognito.md) — AWS Cognito user pool + JWT verification.
@@ -38,7 +42,8 @@ The catalog. One line per page. Browse here first.
 
 ## Tickets
 
-- [`tickets/INV-1156.md`](tickets/INV-1156.md) — FE feedback form moved onto report page (PR #17, related to INV-1157 BE).
+- [`tickets/INV-1156.md`](tickets/INV-1156.md) — FE feedback form moved onto report page (QA PR #19 merged; production PR #18 in review; In Review).
+- [`tickets/INV-1157.md`](tickets/INV-1157.md) — BE `feedback-status` GET endpoint (QA PR #28 merged; production PR #27 in review; In Review).
 
 ## Operational
 
