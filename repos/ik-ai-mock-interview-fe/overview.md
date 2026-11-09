@@ -1,5 +1,7 @@
 # ik-ai-mock-interview-fe — overview
 
+> **Note (2026-11-09):** this is the **V1** FE. The live V2 app is `ikickstart/ai-mock-interview-fe-v2`; see [`../ai-mock-interview-fe-v2/overview.md`](../ai-mock-interview-fe-v2/overview.md). V1 is not the target for INV-1156.
+
 AI Mock Interview **frontend**. Next.js 15 App Router application, but effectively a **client-rendered SPA** — every page is `'use client'`, no server components, no server actions, no `app/api` route handlers. Data is fetched in-browser via React Query against the backend.
 
 - **Remote:** `git@github-ik:ikickstart/ik-ai-mock-interview-fe.git`

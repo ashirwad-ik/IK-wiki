@@ -23,6 +23,10 @@ Applies to `ik-ai-mock-interview-fe` and `ik-ai-mock-interview-be`. Confirmed by
 7. Run the production deploy action. BE: `build-prod` then `deploy-production` (workflow_dispatch on `production`). FE: `vercel-deploy` on push to `production`.
 8. Merge to `production`. Move the Jira ticket to Done.
 
+## FE v2 variant (`ai-mock-interview-fe-v2`)
+
+The live FE is `ikickstart/ai-mock-interview-fe-v2`, which has only `main` and `qa`. Same QA-first flow, but the final PR targets **`main`** (Vercel deploys `main` to production). QA URL: https://qa-mi-v2.interviewkickstart.com. The "ignore `main`" rule applies to the BE and the V1 FE only. See [`../repos/ai-mock-interview-fe-v2/overview.md`](../repos/ai-mock-interview-fe-v2/overview.md).
+
 ## Branch-base rule
 
 - QA PR branch: base on `origin/qa`.
@@ -56,7 +60,9 @@ Consequences:
 - If `MIGRATION_CUTOVER` is not `true`, `deploy-qa` runs in shadow mode and the gate does not fire.
 - No production workflow fires the gate. The production PR's gate depends on the QA run (see the flag below).
 
-**Open flag (not verified, confirm with the gate owner, Dipen):** the gate reports on the deployed commit SHA. The production PR branch is a separately cherry-picked commit with a different SHA. It is unconfirmed whether the production PR's required gate clears from the QA e2e result or needs a separate run.
+**Observed behaviour (INV-1156/1157, 2026-11-09):** `automation-testing-gate` is a required status posted by an external QA post-deploy E2E automation ("Gate Plan"), scoped to a **commit SHA** and only in the QA flow. On a **production PR it is never reported**, so it shows "Expected, waiting for status" forever. It is not a job and will not "run". A cherry-pick to production makes a new SHA, so a QA-green status does not carry over. A dev cannot satisfy it from the PR: needs admin merge/override or the gate owner.
+
+**Open flag (partly answered above; not verified, confirm with the gate owner, Dipen):** the gate reports on the deployed commit SHA. The production PR branch is a separately cherry-picked commit with a different SHA. It is unconfirmed whether the production PR's required gate clears from the QA e2e result or needs a separate run.
 
 ## Jira status mapping
 

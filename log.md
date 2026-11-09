@@ -18,3 +18,5 @@ Verbs: `seed`, `learn`, `fix`, `lint`, `rename`, `archive`.
 ## [2026-11-09] lint | fe + be repos | default-branch lines said main; corrected to production-live. Notion-vs-manager main contradiction flagged, not resolved
 ## [2026-11-09] learn | workflow + be | backend deploy-qa fires automation-testing-gate via e2e job (only if real deploy); build-qa does not; prod workflows do not
 ## [2026-11-09] lint | fe | FE conventions said no in-repo workflows; corrected (vercel-deploy.yml is in-repo, fires gate on qa and production). Open question on gate ownership answered in part
+## [2026-11-09] learn | fe-v2 + be + workflow | INV-1156/1157 feedback gate; real FE is ai-mock-interview-fe-v2 (main/qa, prod=main); BE PRs #30-#32, FE PRs #3-#8; automation-testing-gate SHA-scoped, never reported on production PR
+## [2026-11-09] lint | fe + tickets | V1 FE overview flagged as superseded; PR-number ambiguity flags in INV-1156/1157 resolved

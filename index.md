@@ -15,6 +15,8 @@ The catalog. One line per page. Browse here first.
 - [`repos/ik-ai-mock-interview-fe/integrations.md`](repos/ik-ai-mock-interview-fe/integrations.md) — what the frontend talks to.
 - [`repos/ik-ai-mock-interview-fe/gotchas.md`](repos/ik-ai-mock-interview-fe/gotchas.md) — tracked `.env.*`, mobile gate, secret exposure.
 
+- [`repos/ai-mock-interview-fe-v2/overview.md`](repos/ai-mock-interview-fe-v2/overview.md) — **live FE (V2)**: branches `main`/`qa`, Vercel deploy, report feedback gate (INV-1156). Supersedes V1 pages above for new work.
+
 ## Workflow & references
 
 - [`workflows/release-flow.md`](workflows/release-flow.md) — QA-first release flow (feature → `qa` → QA test → `production`), branch-base rule, Jira mapping, and link to the Notion context page.
@@ -42,8 +44,8 @@ The catalog. One line per page. Browse here first.
 
 ## Tickets
 
-- [`tickets/INV-1156.md`](tickets/INV-1156.md) — FE feedback form moved onto report page (QA PR #19 merged; production PR #18 in review; In Review).
-- [`tickets/INV-1157.md`](tickets/INV-1157.md) — BE `feedback-status` GET endpoint (QA PR #28 merged; production PR #27 in review; In Review).
+- [`tickets/INV-1156.md`](tickets/INV-1156.md) — FE feedback form moved onto report page (V2 FE: QA PRs #3-#7 merged; production PR #8 to `main` open; V1 PRs #17-#19 superseded).
+- [`tickets/INV-1157.md`](tickets/INV-1157.md) — BE `feedback-status` GET endpoint (QA PRs #30/#31 merged; production PR #32 open; old #25/#27/#28/#29 superseded).
 
 ## Operational
 

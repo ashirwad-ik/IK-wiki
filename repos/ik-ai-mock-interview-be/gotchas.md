@@ -52,3 +52,7 @@ Nothing runs on PR besides commit-lint. Adding a test locally is fine; confirm h
 - Current state of `MIGRATION_CUTOVER`.
 - Testing policy + preferred framework.
 - Secrets delivery for dev/QA (Cognito pool, LiveKit, AWS, DynamoDB tables, S3 bucket).
+
+## feedback-status path and QA deploy (INV-1157)
+
+The FE gate calls `GET /interview/{id}/feedback-status` (short path). The `/user/{user_id}/...` variant 404s from the FE, which made the gate always show. If this endpoint is not deployed to QA, the response reads as "not submitted" and the report gate reappears. Deploy BE (`deploy-qa`) before testing FE. See [`../ai-mock-interview-fe-v2/overview.md`](../ai-mock-interview-fe-v2/overview.md) and [`../../workflows/release-flow.md`](../../workflows/release-flow.md).
