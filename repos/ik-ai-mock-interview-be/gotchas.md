@@ -56,3 +56,12 @@ Nothing runs on PR besides commit-lint. Adding a test locally is fine; confirm h
 ## feedback-status path and QA deploy (INV-1157)
 
 The FE gate calls `GET /interview/{id}/feedback-status` (short path). The `/user/{user_id}/...` variant 404s from the FE, which made the gate always show. If this endpoint is not deployed to QA, the response reads as "not submitted" and the report gate reappears. Deploy BE (`deploy-qa`) before testing FE. See [`../ai-mock-interview-fe-v2/overview.md`](../ai-mock-interview-fe-v2/overview.md) and [`../../workflows/release-flow.md`](../../workflows/release-flow.md).
+
+## Handler pitfalls found in INV-1157 (2026-11-10)
+
+All three surface to the client only as `{"code":"UNEXPECTED_ERROR","message":"Service unavailable"}` (503); the real error is in logs/Sentry.
+
+- **`login_source` kwarg:** `@require_authentication()` injects `login_source` into every handler (from the "support both login" change). A handler without `login_source: str = None` raises `TypeError: unexpected keyword argument 'login_source'`.
+- **`Depends(get_service(Service))`, no lambda:** `get_service(Service)` already returns a FastAPI dependency. `Depends(lambda: get_service(Service))` injects the function, giving `AttributeError: 'function' object has no attribute ...`.
+- **Route prefix:** use the short path `/interview/{id}/...` to match the FE and other routes, not `/user/{user_id}/...`.
+- Sentry: check only after `deploy-qa` and after hitting the endpoint. Unrelated noise: `/auth/refresh` NotAuthorized (token expiry).

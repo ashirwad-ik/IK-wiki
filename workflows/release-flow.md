@@ -97,3 +97,12 @@ Full detail is in the Notion page below. Summary only:
 - [`../repos/ik-ai-mock-interview-fe/conventions.md`](../repos/ik-ai-mock-interview-fe/conventions.md)
 - [`../repos/ik-ai-mock-interview-be/conventions.md`](../repos/ik-ai-mock-interview-be/conventions.md)
 - [`../tickets/INV-1156.md`](../tickets/INV-1156.md), [`../tickets/INV-1157.md`](../tickets/INV-1157.md)
+
+## Update 2026-11-10: branch and PR reuse rules (user-confirmed)
+
+- **QA branch/PR:** reuse the current open one; create a new QA branch only when the previous QA PR is merged.
+- **Production:** never create a new production branch/PR. Push updates to the single open production PR (BE INV-1157: #32). Close stray PRs except the production one.
+- Check Sentry only after `deploy-qa` plus hitting the endpoint.
+- Local FE testing uses email-ID login, no Google auth.
+- The user runs the Actions and merges, not Claude.
+- Heads-up: the PM is redesigning the FE; FE work may move to a new PR (see [`../tickets/INV-1156.md`](../tickets/INV-1156.md)).
