@@ -21,3 +21,4 @@ Verbs: `seed`, `learn`, `fix`, `lint`, `rename`, `archive`.
 ## [2026-11-09] learn | fe-v2 + be + workflow | INV-1156/1157 feedback gate; real FE is ai-mock-interview-fe-v2 (main/qa, prod=main); BE PRs #30-#32, FE PRs #3-#8; automation-testing-gate SHA-scoped, never reported on production PR
 ## [2026-11-09] lint | fe + tickets | V1 FE overview flagged as superseded; PR-number ambiguity flags in INV-1156/1157 resolved
 ## [2026-11-10] learn | be + fe-v2 + workflow | INV-1157 three-bug saga (path, login_source, Depends lambda) masked as 503; reuse-QA/single-production-PR (#32) rule; PM FE redesign may supersede FE #8
+## [2026-11-10] learn | be + tickets | INV-1157 BE PR #32 QA-verified, awaiting manager merge + deploy-production; FE redesign pending PM artifacts (FE #8 may be superseded)
