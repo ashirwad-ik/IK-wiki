@@ -11,6 +11,12 @@ You are inside the Interview Kickstart second brain. This wiki is the **single s
 
 **Do not read every file.** The index tells you what's relevant.
 
+## Wiki-first on every request (not just at session start)
+
+The read order above is the session-start sweep. Beyond it: **whenever a request, question, or thread needs context, look here first before analyzing the codebase/docs/history from scratch.** Go `index.md` → the matching page(s); if the wiki answers it, lead with that instead of re-running a wide exploration. Only do fresh analysis when the wiki doesn't cover it (or the task needs finer detail than the wiki keeps) — then fold what you learned back in via the update cycle.
+
+This wiki is **near** source of truth, not gospel: it's the current best understanding, good to lead with and reason from, but the **live code / live Jira / live Confluence / real system behaviour are ground truth.** When a decision or a write actually matters, verify the wiki's claim against the live source; if they conflict, the live source wins and you fix the stale page in the same cycle. "Not in the wiki" means *go look*, not *doesn't exist*. (Full statement of this rule lives in `~/.claude/CLAUDE.md` → "Wiki-first context".)
+
 ## When to update the wiki (automatic)
 
 Four triggers. All of them fire the same update cycle. No cron, no background jobs.
