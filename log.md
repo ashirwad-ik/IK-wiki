@@ -23,3 +23,4 @@ Verbs: `seed`, `learn`, `fix`, `lint`, `rename`, `archive`.
 ## [2026-11-10] learn | be + fe-v2 + workflow | INV-1157 three-bug saga (path, login_source, Depends lambda) masked as 503; reuse-QA/single-production-PR (#32) rule; PM FE redesign may supersede FE #8
 ## [2026-11-10] learn | be + tickets | INV-1157 BE PR #32 QA-verified, awaiting manager merge + deploy-production; FE redesign pending PM artifacts (FE #8 may be superseded)
 ## [2026-11-11] learn | wiki | CLAUDE.md: wiki-first context rule (consult wiki before scratch analysis; near-source-of-truth, live code wins)
+## [2026-11-11] seed | wiki | AGENTS.md added (vendor-neutral wiki-first entry for non-Claude agents)
