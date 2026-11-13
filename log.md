@@ -24,3 +24,4 @@ Verbs: `seed`, `learn`, `fix`, `lint`, `rename`, `archive`.
 ## [2026-11-10] learn | be + tickets | INV-1157 BE PR #32 QA-verified, awaiting manager merge + deploy-production; FE redesign pending PM artifacts (FE #8 may be superseded)
 ## [2026-11-11] learn | wiki | CLAUDE.md: wiki-first context rule (consult wiki before scratch analysis; near-source-of-truth, live code wins)
 ## [2026-11-11] seed | wiki | AGENTS.md added (vendor-neutral wiki-first entry for non-Claude agents)
+## [2026-11-13] learn | fe-v2 + be + services/livekit | INV-1184/1185/1186 Stay flow: FE bfcache guard + reactive mic icon + end-click layout shipped on QA PR; mic-after-Stay cascade (Chrome hitch → agent leaves → empty_timeout → room_finished → ABORTED) requires two-part fix (BE empty_timeout + webhook guard, worker grace period in separate uplevel-livekit-worker repo), not yet implemented, awaiting manager alignment

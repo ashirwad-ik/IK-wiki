@@ -57,6 +57,24 @@ Nothing runs on PR besides commit-lint. Adding a test locally is fine; confirm h
 
 The FE gate calls `GET /interview/{id}/feedback-status` (short path). The `/user/{user_id}/...` variant 404s from the FE, which made the gate always show. If this endpoint is not deployed to QA, the response reads as "not submitted" and the report gate reappears. Deploy BE (`deploy-qa`) before testing FE. See [`../ai-mock-interview-fe-v2/overview.md`](../ai-mock-interview-fe-v2/overview.md) and [`../../workflows/release-flow.md`](../../workflows/release-flow.md).
 
+## LiveKit `empty_timeout` + `room_finished` cascade kills live interviews (2026-11-13)
+
+Found while debugging INV-1185 "Stay in the interview" mic bug.
+
+Chain: Chrome's native "Leave site?" dialog briefly mutes the local track and hitches the WebRTC connection → the agent worker (`uplevel-livekit-worker`, separate repo) sees the candidate "disconnect" and leaves the room → room goes empty → LiveKit's `empty_timeout` fires → LiveKit sends `room_finished` → `services/webhook/terminate_session_webhook.py` marks the interview `ABORTED` with no grace period or minimum-duration check. If the user clicks Stay, they reconnect to a dead interview.
+
+**Proper fix is two-part:**
+1. **Here (`ik-ai-mock-interview-be`):**
+   - `services/agent/livekit_adapter.py` ~L81: add `empty_timeout=120` (seconds) to `RoomConfiguration(agents=[RoomAgentDispatch(agent_name=self.agent_name)])`. Keeps the room alive through a brief hitch.
+   - `services/webhook/terminate_session_webhook.py` ~L44: add a minimum-duration guard before `terminate_if_in_progress(..., ABORTED)`. If the interview is under ~30s or shows a clear hitch pattern, don't abort.
+2. **`uplevel-livekit-worker` (separate repo, not in this workspace):** agent waits 30–60s before leaving on candidate disconnect; resume on reconnect inside the window.
+
+**Part 1 alone is a real improvement but does not fix UX** — DB rows stop getting ABORTED on hitches, but the candidate still reconnects to a silent room because the agent worker already left. Both parts are required for the Stay flow to work.
+
+Also: `RoomConfiguration(agents=[RoomAgentDispatch(...)])` is applied **once at room creation**. If the dispatched agent leaves, it is not auto-re-dispatched on new joins. Re-dispatch would need an explicit server-side call.
+
+See [`../ai-mock-interview-fe-v2/overview.md`](../ai-mock-interview-fe-v2/overview.md) → "Stay flow + mic cascade" and `inbox/2026-11-13-stay-mic-bug-and-be-empty-timeout-cascade.md`.
+
 ## Handler pitfalls found in INV-1157 (2026-11-10)
 
 All three surface to the client only as `{"code":"UNEXPECTED_ERROR","message":"Service unavailable"}` (503); the real error is in logs/Sentry.
