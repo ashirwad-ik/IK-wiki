@@ -29,6 +29,7 @@ The catalog. One line per page. Browse here first.
 - [`services/s3.md`](services/s3.md) — transcript storage.
 - [`services/dynamodb.md`](services/dynamodb.md) — reports + user metadata.
 - [`services/sentry.md`](services/sentry.md) — error tracking (frontend).
+- [`services/langfuse.md`](services/langfuse.md) — LLM observability + prompt management (Resume Analyzer done; CareerOps pending via INV-1073).
 
 ## Integrations
 
@@ -46,6 +47,7 @@ The catalog. One line per page. Browse here first.
 
 - [`tickets/INV-1156.md`](tickets/INV-1156.md) — FE feedback form moved onto report page (V2 FE: QA PRs #3-#7 merged; production PR #8 to `main` open; V1 PRs #17-#19 superseded; PM FE redesign may supersede #8).
 - [`tickets/INV-1157.md`](tickets/INV-1157.md) — BE `feedback-status` GET endpoint (QA PRs #30/#31 merged; production PR #32 open, QA-verified, 2026-11-10 debug saga; old #25/#27/#28/#29 superseded).
+- [`tickets/INV-1073.md`](tickets/INV-1073.md) — CareerOps → Langfuse tracing + prompt migration (not started; plan + "my understanding" artifacts prepared 2026-11-12, 5 open questions blocking).
 
 ## Operational
 
