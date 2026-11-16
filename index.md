@@ -48,6 +48,9 @@ The catalog. One line per page. Browse here first.
 - [`tickets/INV-1156.md`](tickets/INV-1156.md) — FE feedback form moved onto report page (V2 FE: QA PRs #3-#7 merged; production PR #8 to `main` open; V1 PRs #17-#19 superseded; PM FE redesign may supersede #8).
 - [`tickets/INV-1157.md`](tickets/INV-1157.md) — BE `feedback-status` GET endpoint (QA PRs #30/#31 merged; production PR #32 open, QA-verified, 2026-11-10 debug saga; old #25/#27/#28/#29 superseded).
 - [`tickets/INV-1073.md`](tickets/INV-1073.md) — CareerOps → Langfuse tracing + prompt migration (not started; plan + "my understanding" artifacts prepared 2026-11-12, 5 open questions blocking).
+- [`tickets/INV-1183.md`](tickets/INV-1183.md) — Tab close: native "Leave site?" prompt only; LiveKit `disconnectOnPageLeave: false` keeps agent on Cancel (fe-v2 PR #22, moved to review 2026-11-16).
+- [`tickets/INV-1185.md`](tickets/INV-1185.md) — "Before you go" card on focus-leave; `useFocusLeaveOnce` (visibilitychange + debounced mouseleave; no `window.blur`) (fe-v2 PR #22).
+- [`tickets/INV-1186.md`](tickets/INV-1186.md) — End-click confirmation card below 25% elapsed; `sm:max-w-3xl` end-early layout (fe-v2 PR #22). Subsumes INV-1184.
 
 ## Operational
 

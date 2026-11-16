@@ -26,25 +26,30 @@ AI Mock Interview **frontend V2**. This is the live FE repo. The older `ik-ai-mo
 
 Ticket: [`../../tickets/INV-1156.md`](../../tickets/INV-1156.md). BE counterpart: [`../../tickets/INV-1157.md`](../../tickets/INV-1157.md).
 
-## Stay flow + mic cascade (INV-1184 / 1185 / 1186, 2026-11-13)
+## Exit surfaces (INV-1183 / 1185 / 1186, 2026-11-16)
 
-Tab-close flow: `beforeunload` shows Chrome's native "Leave site?" prompt; on Cancel, the in-app "Before you go" card opens (queued via `setTimeout` in `beforeunload`, cleared by `pagehide`). On real leave, `pagehide` PATCHes `ABORTED` with keepalive and sets `localStorage.aimi-abandoned` for the next-visit feedback card (INV-1183).
+Three exit paths, one surface each. They don't stack.
 
-**Shipped on the QA PR (today):**
-- `src/hooks/useTerminateOnUnload.ts` — guard on `event.persisted` in `pagehide`. Chrome puts the page into bfcache while the native prompt is shown; the legacy handler PATCHed `ABORTED` on bfcache entry, killing live interviews whenever Chrome touched bfcache.
-- `src/components/interview/stage.tsx` — `LocalTile` uses `useLocalParticipant().isMicrophoneEnabled` (reactive) instead of `participant.isMicrophoneEnabled` (static read). Mic icon now re-renders when the track mutes.
-- `src/components/interview/room-dialogs.tsx` — end-click variant narrowed to `sm:max-w-3xl` with full-width countdown + 2-col body (miss | how-to). Tab-close keeps `sm:max-w-5xl` 3-col with trophy card.
-- Report-unlock copy: "11:15 of 45:00" is **elapsed interview time** (artifact: quarter of 45-min duration). Not wall-clock.
+| Trigger | Surface | Hook |
+|---|---|---|
+| Tab close / refresh / Ctrl+W | Native "Leave site?" prompt only | `useTerminateOnUnload` (INV-1183) |
+| Tab-switch / window-blur / cursor-to-tab-bar | In-app "Before you go" card, once per interview | `useFocusLeaveOnce` (INV-1185) |
+| In-room End button below 25% elapsed | End-click confirmation card | INV-1186 |
 
-**Unresolved (FE can't fix alone) — mic after Stay:**
+LiveKit: `<LiveKitRoom options={{ disconnectOnPageLeave: false }}>` — agent stays connected across the native prompt; Cancel resumes the interview with no in-app card and no mic-recovery hop.
 
-During the native "Leave site?" prompt Chrome mutes the local `MediaStreamTrack` at the browser level and briefly hitches WebRTC. Four FE strategies tried:
-1. `setMicrophoneEnabled(true)` — LiveKit `unmute()` no-ops against the browser-level mute.
-2. `LocalAudioTrack.restartTrack()` — races with LiveKit's cached publication.
-3. `unpublishTrack(track, stopOnUnpublish=true)` + `setMicrophoneEnabled(true)` — leaves `useTrackToggle` in `pending: true`, control-bar mic button becomes unclickable permanently.
-4. `setMicrophoneEnabled(false)` → `setMicrophoneEnabled(true)` (non-destructive toggle, current code in `interview-room.tsx` `onStay`) — button stays clickable but mic still doesn't recover.
+**Key files**
+- `src/hooks/useTerminateOnUnload.ts` — `beforeunload` sets `returnValue` for the native prompt; `pagehide` (bfcache-guarded via `event.persisted`) persists `aimi-abandoned` and PATCHes `ABORTED` with `keepalive`. `popstate` swallowed. No card-queue plumbing anymore.
+- `src/hooks/useFocusLeaveOnce.ts` (new) — fires once per mount on `visibilitychange → hidden` or `document.mouseleave` (`clientY ≤ 0`, debounced 450 ms). `beforeunload` + `mouseenter` cancel the pending mouseleave trigger. **`window.blur` is deliberately not listened to** (Chrome also fires blur when it opens the native prompt → would re-introduce the Cancel-shows-card regression).
+- `src/components/interview/room-dialogs.tsx` — end-click variant `sm:max-w-3xl` with full-width countdown + 2-col body (miss | how-to); non-blocking mic restart on Keep interviewing; keyboard shortcuts suppressed while open.
+- `src/components/interview/stage.tsx` — `LocalTile` uses `useLocalParticipant().isMicrophoneEnabled` (reactive), so the mic icon re-renders when the track mutes.
+- Report-unlock copy: "11:15 of 45:00" is **elapsed interview time** (quarter of duration), not wall-clock.
 
-Worse, the hitch cascades on the BE and often ABORTs the interview before the user even clicks Stay — see [`../ik-ai-mock-interview-be/gotchas.md`](../ik-ai-mock-interview-be/gotchas.md) → "LiveKit empty_timeout + room_finished cascade" and [`../../services/livekit.md`](../../services/livekit.md) → "Stay / hitch cascade (unresolved)". Proper fix is two-part (BE empty_timeout + webhook guard, AND agent grace period in `uplevel-livekit-worker`). Waiting on manager alignment before shipping Part 1 standalone.
+**Mic cascade (BE/worker side) — still unresolved.** `disconnectOnPageLeave: false` removes the FE's contribution on the native-prompt path (room no longer torn down on Cancel), but the broader LiveKit disconnect → `empty_timeout` → `room_finished` → `ABORTED` path still exists for genuine disconnects. The 2026-11-13 two-part fix (BE `empty_timeout` + webhook guard, AND agent grace period in `uplevel-livekit-worker`) is still waiting on manager alignment. See [`../ik-ai-mock-interview-be/gotchas.md`](../ik-ai-mock-interview-be/gotchas.md) → "LiveKit empty_timeout + room_finished cascade" and [`../../services/livekit.md`](../../services/livekit.md) → "Stay / hitch cascade (unresolved)".
+
+**INV-1184** is a duplicate of INV-1186 (end-click card); close as such.
+
+Tickets: [`../../tickets/INV-1183.md`](../../tickets/INV-1183.md) · [`../../tickets/INV-1185.md`](../../tickets/INV-1185.md) · [`../../tickets/INV-1186.md`](../../tickets/INV-1186.md).
 
 ## Redesign pending (2026-11-10)
 
