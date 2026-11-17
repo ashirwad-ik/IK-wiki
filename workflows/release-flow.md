@@ -106,3 +106,17 @@ Full detail is in the Notion page below. Summary only:
 - Local FE testing uses email-ID login, no Google auth.
 - The user runs the Actions and merges, not Claude.
 - Heads-up: the PM is redesigning the FE; FE work may move to a new PR (see [`../tickets/INV-1156.md`](../tickets/INV-1156.md)).
+
+## Update 2026-11-17: direct push to QA, no per-iteration PR (user-confirmed)
+
+Applies to **all FE repos going forward** (confirmed for `ai-mock-interview-fe-v2`; same rule for upcoming repos unless the user says otherwise):
+
+- **QA is unprotected. Push commits straight to `qa`.** No feature branch, no PR per iteration. The branch's own `vercel-deploy` workflow runs on push and deploys to the QA URL. Verify there.
+- **Do not open a PR for every iteration.** Opening `qa → main` while iterating means every qa push re-runs CI/e2e/vercel-deploy on that PR — wasted minutes, noisy checks. The qa branch's own `push` workflow is enough for QA verification.
+- **The final PR is `qa → main`, raised only once the whole set is QA-verified and the user says ship.** That PR gets a clean, detailed description covering every ticket it carries. Manager reviews and merges it.
+- **If a stray `qa → main` PR is already open while iterating, close it.** It can be reopened or raised fresh when ready. Closing stops CI from firing on every qa push. (This was the fix on 2026-11-17 for PR #22.)
+- **Local is the source of truth** until the final PR is raised. Nothing reaches `main` without the user's explicit go-ahead.
+- Commit messages still must satisfy the husky `commit-msg` hook: `<TICKET-ID>: <description>` (e.g. `INV-1202: …`). Merge commits included.
+- Git identity stays IK: `Ashirwad <ashirwad.singh@interviewkickstart.com>`, SSH alias `github-ik`, GitHub user `ashirwad-ik`. Never force-push qa.
+
+Supersedes step 2 of the "Flow" section above **for FE v2 and newer repos only** (BE and V1 FE keep the "PR into qa" flow unless Ratul says otherwise).
