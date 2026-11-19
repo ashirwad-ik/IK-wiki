@@ -20,6 +20,7 @@ The catalog. One line per page. Browse here first.
 ## Workflow & references
 
 - [`workflows/release-flow.md`](workflows/release-flow.md) — QA-first release flow (feature → `qa` → QA test → `production`), branch-base rule, Jira mapping, and link to the Notion context page.
+- [`workflows/story-pointing.md`](workflows/story-pointing.md) — Applied AI story pointing guide (0.25–3 SP examples, calibrated for AI-enabled SDE-1). Source: Confluence PM space.
 
 ## Services (shared externals)
 
