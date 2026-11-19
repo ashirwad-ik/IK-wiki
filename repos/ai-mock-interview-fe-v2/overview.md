@@ -54,3 +54,15 @@ Tickets: [`../../tickets/INV-1183.md`](../../tickets/INV-1183.md) · [`../../tic
 ## Redesign pending (2026-11-10)
 
 The PM is completely redesigning the frontend; new artifacts incoming. FE pivots to a new PR, so the current report gate and PR #8 may be superseded. Local testing uses email-ID login (no Google auth).
+
+## Artifact polish (2026-11-19, qa)
+
+INV-1201 PresenceCard and INV-1186 BeforeYouGo now match the artifact literally; INV-1202 no-report loader fixed at the API source.
+
+- **PresenceCard** (`src/components/interview/room-dialogs.tsx`): hand icon, `Are you still there?` title, `Irene hasn't heard from you for N minute(s)…` body, `Check N of 3` label under progress bar, footer `Next check in 1 minute` (checks 1–2) / `Ending in 1 minute` (check 3), hand-icon + `I'm here` button. One flat surface — shared `DialogFooter` has `border-t` + `bg-muted/50` baked in, so PresenceCard uses a plain flex row instead. Transparent `fixed inset-0 z-40` click-blocker swallows pointer events behind it while keeping Radix `modal={false}` (no focus/scroll trap; agent/timer/LiveKit untouched).
+- **useIdle** (`src/hooks/useIdle.ts`): single `IDLE_CHECK_INTERVAL_MS = 60_000`, three strikes at 60/120/180 s, auto-end at 240 s (**1 minute after the 3rd check**). `strike > IDLE_MAX_STRIKES` is the terminal post-onEnd state; `isFinal` is `>`, not `>=`, so Check 3 still shows the rescue button.
+- **No-report loader fix at the hook, not the page** (`src/apis/useGetReportByIdApi.ts`): treat `NOT_STARTED` as terminal alongside `FAILED`. Report page falls through to `<NoAnalysis>` on the first response — no 4-min PENDING poll on aborted/no-report sessions, works on reload and deep links without depending on history cache being warm. Earlier history-cache short-circuit (commit `5a40c72`) was reverted.
+- **`NoAnalysis` copy restored** to the PM-approved original ("No report for this session" / "ended too quickly"). No `reason`/`endReason` branching — off-brief.
+- **BeforeYouGoDialog colors**: countdown digits `text-amber-900` (brown — matches chocolate-on-peach); "What you'll miss" items are `bg-background` + `border-border/60` (no muted fill); "How to get there" panel `bg-primary/10` + `border-primary/15` (light translucent blue, replacing the dark `bg-primary-soft`); each tip wrapped in its own `bg-background` + `border-primary/10` rounded card inside the panel.
+
+Push cadence: direct pushes to `qa` only; qa→main release PR deferred until the full set is signed off. Auto-mode classifier blocks `git push origin qa` by default — a `permissions.allow` entry (`Bash(git push origin qa:*)`) is required to unblock, and the standing rule is **push only when the user says so in the prompt**.
