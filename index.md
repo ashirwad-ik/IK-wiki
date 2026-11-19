@@ -1,60 +1,51 @@
 # Index
 
-The catalog. One line per page. Browse here first.
+Catalog. One line per page. Start here.
 
 ## Repos
 
-- [`repos/ik-ai-mock-interview-be/overview.md`](repos/ik-ai-mock-interview-be/overview.md) — AI Mock Interview backend (FastAPI, MySQL, Cognito, LiveKit).
-- [`repos/ik-ai-mock-interview-be/architecture.md`](repos/ik-ai-mock-interview-be/architecture.md) — backend components, data flow, request lifecycle.
-- [`repos/ik-ai-mock-interview-be/conventions.md`](repos/ik-ai-mock-interview-be/conventions.md) — commit style, PR flow, CI.
-- [`repos/ik-ai-mock-interview-be/integrations.md`](repos/ik-ai-mock-interview-be/integrations.md) — what the backend talks to and how.
-- [`repos/ik-ai-mock-interview-be/gotchas.md`](repos/ik-ai-mock-interview-be/gotchas.md) — known blockers, surprising behaviour.
-- [`repos/ik-ai-mock-interview-fe/overview.md`](repos/ik-ai-mock-interview-fe/overview.md) — AI Mock Interview frontend (Next.js 15 App Router, React 19 SPA).
-- [`repos/ik-ai-mock-interview-fe/architecture.md`](repos/ik-ai-mock-interview-fe/architecture.md) — frontend component + data-flow architecture.
-- [`repos/ik-ai-mock-interview-fe/conventions.md`](repos/ik-ai-mock-interview-fe/conventions.md) — commit style, husky hooks, lint, format.
-- [`repos/ik-ai-mock-interview-fe/integrations.md`](repos/ik-ai-mock-interview-fe/integrations.md) — what the frontend talks to.
-- [`repos/ik-ai-mock-interview-fe/gotchas.md`](repos/ik-ai-mock-interview-fe/gotchas.md) — tracked `.env.*`, mobile gate, secret exposure.
+- [`repos/ik-ai-mock-interview-be/overview.md`](repos/ik-ai-mock-interview-be/overview.md) — BE: FastAPI, MySQL, Cognito, LiveKit.
+- [`repos/ik-ai-mock-interview-be/architecture.md`](repos/ik-ai-mock-interview-be/architecture.md) — BE components, data flow, request lifecycle.
+- [`repos/ik-ai-mock-interview-be/conventions.md`](repos/ik-ai-mock-interview-be/conventions.md) — BE commit style, PR flow, CI.
+- [`repos/ik-ai-mock-interview-be/integrations.md`](repos/ik-ai-mock-interview-be/integrations.md) — BE external connections.
+- [`repos/ik-ai-mock-interview-be/gotchas.md`](repos/ik-ai-mock-interview-be/gotchas.md) — BE known blockers.
+- [`repos/ai-mock-interview-fe-v2/overview.md`](repos/ai-mock-interview-fe-v2/overview.md) — **Live FE (V2)**: `main`/`qa`, Vercel deploy, exit surfaces, feedback gate.
+- V1 FE archived → [`repos/_archived/ik-ai-mock-interview-fe/`](repos/_archived/ik-ai-mock-interview-fe/) (superseded by V2).
 
-- [`repos/ai-mock-interview-fe-v2/overview.md`](repos/ai-mock-interview-fe-v2/overview.md) — **live FE (V2)**: branches `main`/`qa`, Vercel deploy, report feedback gate (INV-1156). Supersedes V1 pages above for new work.
+## Workflows
 
-## Workflow & references
+- [`workflows/release-flow.md`](workflows/release-flow.md) — QA-first release flow, branch-base rule, CI gate, Jira mapping.
+- [`workflows/story-pointing.md`](workflows/story-pointing.md) — Story pointing guide (0.25–3 SP). Source: Confluence PM.
 
-- [`workflows/release-flow.md`](workflows/release-flow.md) — QA-first release flow (feature → `qa` → QA test → `production`), branch-base rule, Jira mapping, and link to the Notion context page.
-- [`workflows/story-pointing.md`](workflows/story-pointing.md) — Applied AI story pointing guide (0.25–3 SP examples, calibrated for AI-enabled SDE-1). Source: Confluence PM space.
+## Services
 
-## Services (shared externals)
-
-- [`services/cognito.md`](services/cognito.md) — AWS Cognito user pool + JWT verification.
-- [`services/livekit.md`](services/livekit.md) — real-time interview rooms (tokens, webhooks).
-- [`services/sentinel.md`](services/sentinel.md) — IK's auth service (owns login, sets cookies).
-- [`services/s3.md`](services/s3.md) — transcript storage.
-- [`services/dynamodb.md`](services/dynamodb.md) — reports + user metadata.
-- [`services/sentry.md`](services/sentry.md) — error tracking (frontend).
-- [`services/langfuse.md`](services/langfuse.md) — LLM observability + prompt management (Resume Analyzer done; CareerOps pending via INV-1073).
+- [`services/cognito.md`](services/cognito.md) — Cognito JWT verification.
+- [`services/livekit.md`](services/livekit.md) — Real-time rooms, tokens, webhooks, hitch cascade.
+- [`services/sentinel.md`](services/sentinel.md) — Auth service (login, cookies).
+- [`services/s3.md`](services/s3.md) — Transcript storage.
+- [`services/dynamodb.md`](services/dynamodb.md) — Reports + user metadata.
+- [`services/sentry.md`](services/sentry.md) — Error tracking (FE).
+- [`services/langfuse.md`](services/langfuse.md) — LLM observability + prompts (Resume Analyzer done; CareerOps via INV-1073).
 
 ## Integrations
 
-- [`integrations/fe-be-contract.md`](integrations/fe-be-contract.md) — how the frontend reaches the backend: base URLs, auth, API key header, LiveKit handshake.
+- [`integrations/fe-be-contract.md`](integrations/fe-be-contract.md) — FE ↔ BE: URLs, auth, API key, LiveKit handshake.
 
-## Environment & secrets
+## Environment
 
-- [`env/README.md`](env/README.md) — **env-var registry and the "never commit a value" policy.**
-
-## Decisions
-
-- *(empty — added via `/wiki` or at PR raise when a non-trivial choice is made)*
+- [`env/README.md`](env/README.md) — Env-var registry. Names only, never values.
 
 ## Tickets
 
-- [`tickets/INV-1156.md`](tickets/INV-1156.md) — FE feedback form moved onto report page (V2 FE: QA PRs #3-#7 merged; production PR #8 to `main` open; V1 PRs #17-#19 superseded; PM FE redesign may supersede #8).
-- [`tickets/INV-1157.md`](tickets/INV-1157.md) — BE `feedback-status` GET endpoint (QA PRs #30/#31 merged; production PR #32 open, QA-verified, 2026-11-10 debug saga; old #25/#27/#28/#29 superseded).
-- [`tickets/INV-1073.md`](tickets/INV-1073.md) — CareerOps → Langfuse tracing + prompt migration (not started; plan + "my understanding" artifacts prepared 2026-11-12, 5 open questions blocking).
-- [`tickets/INV-1183.md`](tickets/INV-1183.md) — Tab close: native "Leave site?" prompt only; LiveKit `disconnectOnPageLeave: false` keeps agent on Cancel (fe-v2 PR #22, moved to review 2026-11-16).
-- [`tickets/INV-1185.md`](tickets/INV-1185.md) — "Before you go" card on focus-leave; `useFocusLeaveOnce` (visibilitychange + debounced mouseleave; no `window.blur`) (fe-v2 PR #22).
-- [`tickets/INV-1186.md`](tickets/INV-1186.md) — End-click confirmation card below 25% elapsed; `sm:max-w-3xl` end-early layout (fe-v2 PR #22). Subsumes INV-1184.
+- [`tickets/INV-1156.md`](tickets/INV-1156.md) — FE feedback gate on report (V2 PRs #3–#7 merged; prod #8 open; PM redesign may supersede).
+- [`tickets/INV-1157.md`](tickets/INV-1157.md) — BE feedback-status endpoint (prod PR #32 open, QA-verified).
+- [`tickets/INV-1073.md`](tickets/INV-1073.md) — CareerOps → Langfuse tracing + prompts (not started; 5 open questions).
+- [`tickets/INV-1183.md`](tickets/INV-1183.md) — Tab close: native prompt only (fe-v2 PR #22).
+- [`tickets/INV-1185.md`](tickets/INV-1185.md) — "Before you go" card on focus-leave (fe-v2 PR #22).
+- [`tickets/INV-1186.md`](tickets/INV-1186.md) — End-click confirmation below 25% elapsed (fe-v2 PR #22).
 
 ## Operational
 
-- [`README.md`](README.md) — team-facing explainer.
-- [`CLAUDE.md`](CLAUDE.md) — agent routing + rules.
-- [`log.md`](log.md) — append-only changelog.
+- [`README.md`](README.md) — Team-facing explainer.
+- [`CLAUDE.md`](CLAUDE.md) — Agent routing + rules.
+- [`log.md`](log.md) — Append-only changelog.

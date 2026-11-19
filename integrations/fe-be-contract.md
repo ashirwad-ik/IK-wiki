@@ -26,23 +26,9 @@ Every FE → BE call goes through `apiClient()` in `src/utils/apiUtils.ts` and c
 
 **401 handling (FE side):** single-flight `POST /auth/refresh` to Sentinel → retry once → on failure, `redirectToLogout()` clears client state and sends the user to login.
 
-## Launch flow (canonical round-trip)
+## Launch flow
 
-```mermaid
-sequenceDiagram
-    participant FE
-    participant BE as MI API
-    participant LK as LiveKit
-    FE->>BE: POST /api/v1/ai_mock_interview/user/{id}/launch
-    BE->>LK: mint room + token
-    LK-->>BE: {room, token}
-    BE-->>FE: {room, token, livekit_url}
-    FE->>LK: connect(room, token) via NEXT_PUBLIC_LIVEKIT_URL
-    Note over FE,LK: real-time session
-    LK->>BE: POST /webhook/livekit-webhook (room_finished)
-    BE->>S3: write transcript
-    BE->>DynamoDB: write report
-```
+Sequence diagram in [`../services/livekit.md`](../services/livekit.md). Summary: FE → BE `POST /launch` → BE mints LiveKit room + token → FE connects → session → webhook `room_finished` → transcript (S3) + report (DynamoDB).
 
 ## Representative endpoints
 

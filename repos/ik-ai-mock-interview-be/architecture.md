@@ -72,32 +72,13 @@ flowchart LR
 | **DynamoDB** | Report analysis + user metadata. | `database/dynamodb_config.py` + boto3. Tables from env (`DYNAMODB_INTERVIEW_REPORT_ANALYSIS_TABLE`, `DYNAMODB_USER_METADATA_TABLE`). |
 | **S3** | Interview transcripts at `transcripts/{interview_id}/transcript.json`. | `services/external/s3_service.py`. Bucket from `S3_BUCKET_NAME`. |
 
-## Interview launch flow (FE → BE → LiveKit)
+## Interview launch flow
 
-```mermaid
-sequenceDiagram
-    participant FE
-    participant BE as MI API
-    participant LK as LiveKit
-    FE->>BE: POST /user/{id}/launch
-    BE->>BE: create interview row, pick topic
-    BE->>LK: mint room + access token (livekit_adapter)
-    LK-->>BE: room + token
-    BE-->>FE: {room, token, livekit_url}
-    FE->>LK: connect(room, token) via NEXT_PUBLIC_LIVEKIT_URL
-    Note over FE,LK: real-time session
-    LK->>BE: POST /webhook/livekit-webhook (room_finished)
-    BE->>S3: write transcript
-    BE->>DynamoDB: write report analysis
-```
+See [`../../services/livekit.md`](../../services/livekit.md) and [`../../integrations/fe-be-contract.md`](../../integrations/fe-be-contract.md) for the canonical sequence diagram.
 
-## Auth strategy (plug point)
+## Auth strategy
 
-- `auth/factory.py` selects a strategy; today only `CognitoAuthenticationStrategy`.
-- Verification toggled via `COGNITO_TOKEN_VERIFICATION_ENABLED` + user-pool ID. Locally defaulted off so the stack can start without reaching Cognito.
-- Auto-refresh: expired `id_token` triggers `REFRESH_TOKEN_AUTH` to Cognito; middleware rewrites the response cookies.
-
-See [`../../services/cognito.md`](../../services/cognito.md) for the Cognito side.
+Strategy-pattern via `auth/factory.py` (today: `CognitoAuthenticationStrategy` only). `COGNITO_TOKEN_VERIFICATION_ENABLED` toggles JWKS check (off locally). Auto-refresh rewrites cookies. See [`../../services/cognito.md`](../../services/cognito.md).
 
 ## Deployment (as observed in CI)
 

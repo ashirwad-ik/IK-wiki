@@ -26,19 +26,9 @@ Release flow is in [`../../workflows/release-flow.md`](../../workflows/release-f
 - No `CODEOWNERS`, PR template, or reviewer config in-tree. Branch-protection rules live outside the repo.
 - **Open question for manager:** required reviewers, merge method, branch protections for `main`/`qa`/`production`.
 
-## CI (`.github/workflows/`)
+## CI
 
-| Workflow | Trigger | What it does |
-|---|---|---|
-| `commit-lint.yml` | `pull_request` | Org reusable commit-lint. Only auto-check on PRs. |
-| `build-qa.yml` | `workflow_dispatch` on `qa` | Build image → push to ECR. **Deploys and tests nothing; never fires the gate.** |
-| `deploy-qa.yml` | `workflow_dispatch` on `qa` | Update QA ECS service. Its `e2e` job starts the QA team's tests and fires `automation-testing-gate`, **only when the deploy really ran** (not shadow). |
-| `build-prod.yml` | `workflow_dispatch` on `production` | Build image → ECR. No gate. |
-| `deploy-production.yml` | `workflow_dispatch` on `production` | Update production ECS service. **No e2e job, does not fire the gate.** |
-
-- `.gitlab-ci.yml` retained but superseded. The active CI is GitHub Actions.
-- `MIGRATION_CUTOVER` (repo variable): when not `true`, dispatch runs in "shadow" mode (image tagged `shadow-<sha>`, no ECS update, gate not fired). When `true`, real deploy.
-- Correct release order: `build-qa` → `deploy-qa` (fires gate) → review → `build-prod` → `deploy-production`. Full detail in [`../../workflows/release-flow.md`](../../workflows/release-flow.md#backend-ci-workflows--the-gate).
+Full detail (workflow table, `MIGRATION_CUTOVER`, gate behaviour) in [`../../workflows/release-flow.md`](../../workflows/release-flow.md#backend-ci-workflows--the-gate). Only `commit-lint` runs automatically on PRs; build/deploy are `workflow_dispatch`.
 
 ## Tests & linting
 

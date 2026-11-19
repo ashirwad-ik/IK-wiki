@@ -2,23 +2,7 @@
 
 This is the canonical registry of every env var the AI Mock Interview stack uses. **It records names and purpose, never values.**
 
-## The policy
-
-| | In this wiki | Not in this wiki |
-|---|---|---|
-| Variable names | ✅ yes | — |
-| What the variable is for | ✅ one line each | — |
-| Where the real value lives | ✅ pointer only (password manager, ECS task def, repo's own `.env`) | — |
-| Known naming gotchas | ✅ called out | — |
-| **Actual values** | ❌ **never** | — |
-| API keys, tokens, passwords | ❌ **never** | — |
-| Connection strings with creds | ❌ **never** | — |
-
-The `.gitignore` blocks `.env*`, `*.key`, `*.pem`, `secrets/` — belt + braces. Agents are additionally instructed by [`../CLAUDE.md`](../CLAUDE.md) to refuse writing secret values.
-
-If a secret ever lands in a commit, **treat the credential as leaked** — rotate, don't try to rewrite history on a shared remote.
-
-🔑 marks a secret value: never check in, never log, never paste into tickets.
+Names and purpose only. **Never values.** See [`../CLAUDE.md`](../CLAUDE.md) for the full secrets policy. 🔑 = secret.
 
 ---
 

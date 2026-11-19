@@ -74,8 +74,4 @@ Right now, this single CLAUDE.md is enough. When any of the sub-folders gets lar
 
 ## What never goes in this wiki
 
-- Personal projects (those have their own wiki under `~/Desktop/Ethan/`).
-- Any secret value.
-- Full session transcripts.
-- The actual code of IK repos (the wiki points at code, it doesn't duplicate it).
-- **Screenshots and personal media.** Never paste, embed, upload, or reference files from screenshot folders, Desktop screenshots, Downloads, `~/Pictures/`, etc. (`.png`/`.jpg`/`.heic`/`.webp`/`.gif`/`.mov`/`.mp4`/voice notes) — personal storage only, unless the user explicitly asks for that specific screenshot. If a screenshot is pasted into a session for context, use it to reason and don't persist it here.
+- Personal projects, secret values, full transcripts, actual code, screenshots/personal media (see `~/.claude/CLAUDE.md` for full rules).

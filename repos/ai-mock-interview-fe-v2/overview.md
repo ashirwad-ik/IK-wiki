@@ -38,14 +38,9 @@ Three exit paths, one surface each. They don't stack.
 
 LiveKit: `<LiveKitRoom options={{ disconnectOnPageLeave: false }}>` — agent stays connected across the native prompt; Cancel resumes the interview with no in-app card and no mic-recovery hop.
 
-**Key files**
-- `src/hooks/useTerminateOnUnload.ts` — `beforeunload` sets `returnValue` for the native prompt; `pagehide` (bfcache-guarded via `event.persisted`) persists `aimi-abandoned` and PATCHes `ABORTED` with `keepalive`. `popstate` swallowed. No card-queue plumbing anymore.
-- `src/hooks/useFocusLeaveOnce.ts` (new) — fires once per mount on `visibilitychange → hidden` or `document.mouseleave` (`clientY ≤ 0`, debounced 450 ms). `beforeunload` + `mouseenter` cancel the pending mouseleave trigger. **`window.blur` is deliberately not listened to** (Chrome also fires blur when it opens the native prompt → would re-introduce the Cancel-shows-card regression).
-- `src/components/interview/room-dialogs.tsx` — end-click variant `sm:max-w-3xl` with full-width countdown + 2-col body (miss | how-to); non-blocking mic restart on Keep interviewing; keyboard shortcuts suppressed while open.
-- `src/components/interview/stage.tsx` — `LocalTile` uses `useLocalParticipant().isMicrophoneEnabled` (reactive), so the mic icon re-renders when the track mutes.
-- Report-unlock copy: "11:15 of 45:00" is **elapsed interview time** (quarter of duration), not wall-clock.
+Key hooks: `useTerminateOnUnload` (beforeunload + pagehide ABORTED patch), `useFocusLeaveOnce` (visibilitychange + mouseleave, **no `window.blur`** — Chrome fires blur on native prompt). End-click card in `room-dialogs.tsx` (`sm:max-w-3xl`). Report-unlock copy: "11:15 of 45:00" = elapsed interview time, not wall-clock.
 
-**Mic cascade (BE/worker side) — still unresolved.** `disconnectOnPageLeave: false` removes the FE's contribution on the native-prompt path (room no longer torn down on Cancel), but the broader LiveKit disconnect → `empty_timeout` → `room_finished` → `ABORTED` path still exists for genuine disconnects. The 2026-11-13 two-part fix (BE `empty_timeout` + webhook guard, AND agent grace period in `uplevel-livekit-worker`) is still waiting on manager alignment. See [`../ik-ai-mock-interview-be/gotchas.md`](../ik-ai-mock-interview-be/gotchas.md) → "LiveKit empty_timeout + room_finished cascade" and [`../../services/livekit.md`](../../services/livekit.md) → "Stay / hitch cascade (unresolved)".
+**Mic cascade (BE/worker side) — still unresolved.** See [`../../services/livekit.md`](../../services/livekit.md#stay--hitch-cascade-unresolved-2026-11-13).
 
 **INV-1184** is a duplicate of INV-1186 (end-click card); close as such.
 
@@ -59,10 +54,9 @@ The PM is completely redesigning the frontend; new artifacts incoming. FE pivots
 
 INV-1201 PresenceCard and INV-1186 BeforeYouGo now match the artifact literally; INV-1202 no-report loader fixed at the API source.
 
-- **PresenceCard** (`src/components/interview/room-dialogs.tsx`): hand icon, `Are you still there?` title, `Irene hasn't heard from you for N minute(s)…` body, `Check N of 3` label under progress bar, footer `Next check in 1 minute` (checks 1–2) / `Ending in 1 minute` (check 3), hand-icon + `I'm here` button. One flat surface — shared `DialogFooter` has `border-t` + `bg-muted/50` baked in, so PresenceCard uses a plain flex row instead. Transparent `fixed inset-0 z-40` click-blocker swallows pointer events behind it while keeping Radix `modal={false}` (no focus/scroll trap; agent/timer/LiveKit untouched).
-- **useIdle** (`src/hooks/useIdle.ts`): single `IDLE_CHECK_INTERVAL_MS = 60_000`, three strikes at 60/120/180 s, auto-end at 240 s (**1 minute after the 3rd check**). `strike > IDLE_MAX_STRIKES` is the terminal post-onEnd state; `isFinal` is `>`, not `>=`, so Check 3 still shows the rescue button.
-- **No-report loader fix at the hook, not the page** (`src/apis/useGetReportByIdApi.ts`): treat `NOT_STARTED` as terminal alongside `FAILED`. Report page falls through to `<NoAnalysis>` on the first response — no 4-min PENDING poll on aborted/no-report sessions, works on reload and deep links without depending on history cache being warm. Earlier history-cache short-circuit (commit `5a40c72`) was reverted.
-- **`NoAnalysis` copy restored** to the PM-approved original ("No report for this session" / "ended too quickly"). No `reason`/`endReason` branching — off-brief.
-- **BeforeYouGoDialog colors**: countdown digits `text-amber-900` (brown — matches chocolate-on-peach); "What you'll miss" items are `bg-background` + `border-border/60` (no muted fill); "How to get there" panel `bg-primary/10` + `border-primary/15` (light translucent blue, replacing the dark `bg-primary-soft`); each tip wrapped in its own `bg-background` + `border-primary/10` rounded card inside the panel.
+- **PresenceCard**: hand icon, 3-strike idle check (60/120/180s, auto-end 240s), flat surface (no DialogFooter), transparent click-blocker with Radix `modal={false}`.
+- **useIdle**: `IDLE_CHECK_INTERVAL_MS = 60_000`, `isFinal` is `>` not `>=` so Check 3 shows rescue button.
+- **No-report fix**: `useGetReportByIdApi` treats `NOT_STARTED` as terminal → no 4-min PENDING poll. Earlier history-cache short-circuit reverted.
+- **BeforeYouGoDialog colors**: brown countdown digits, translucent blue "How to get there" panel, per-tip cards.
 
-Push cadence: direct pushes to `qa` only; qa→main release PR deferred until the full set is signed off. Auto-mode classifier blocks `git push origin qa` by default — a `permissions.allow` entry (`Bash(git push origin qa:*)`) is required to unblock, and the standing rule is **push only when the user says so in the prompt**.
+Push cadence: direct to `qa` only; qa→main PR deferred until signed off. Push only when user says so.

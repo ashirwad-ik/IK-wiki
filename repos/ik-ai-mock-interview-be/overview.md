@@ -41,21 +41,6 @@ docker compose -f docker-compose-dev.yml up -d mysql
 
 See [`gotchas.md`](gotchas.md) for the `authentication_user` import-time blocker.
 
-## Key folders
-
-| Folder | Role |
-|---|---|
-| `routers/` | HTTP surface (FE API, admin, webhooks). |
-| `services/` | Business logic. `services/external/` = external API clients. `services/agent/livekit_adapter.py` = LiveKit tokens + rooms. |
-| `repositories/` | DB access (SQLAlchemy). |
-| `models/` | SQLAlchemy models. **`ai_mock_interview_user_auth_model.py` reflects an external table — see gotchas.** |
-| `schemas/` | Pydantic request/response models. |
-| `auth/` | Strategy-pattern auth (`strategies/cognito_strategy.py`). |
-| `middleware/` | `CognitoAuthMiddleware`, CORS, logging. |
-| `migrations/` | Alembic revisions. `migrations/versions/` has the actual steps. |
-| `config/` | `pydantic-settings` config. |
-| `database/` | Engine (`config.py`), scoped sessions (`session_layer.py`), DynamoDB client (`dynamodb_config.py`). |
-
 ## Related
 
 - [`architecture.md`](architecture.md) — components and request lifecycle.
