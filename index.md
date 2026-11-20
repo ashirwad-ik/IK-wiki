@@ -43,7 +43,7 @@ Catalog. One line per page. Start here.
 - [`tickets/INV-1183.md`](tickets/INV-1183.md) — Tab close: native prompt only (fe-v2 PR #22).
 - [`tickets/INV-1185.md`](tickets/INV-1185.md) — "Before you go" card on focus-leave (fe-v2 PR #22).
 - [`tickets/INV-1186.md`](tickets/INV-1186.md) — End-click confirmation below 25% elapsed (fe-v2 PR #22).
-- [`tickets/INV-1187.md`](tickets/INV-1187.md) — PDC-490 hint feature across be + worker + fe-v2 branches `feat/INV-1187-hint-feature`; local-only; blocked on OAuth redirect allowlist.
+- [`tickets/INV-1187.md`](tickets/INV-1187.md) — PDC-490 hint feature: 3 PRs open to `qa` (be#40, worker#17, fe#32), awaiting review/merge.
 
 ## Operational
 
