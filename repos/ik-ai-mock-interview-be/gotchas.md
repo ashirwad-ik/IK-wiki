@@ -2,6 +2,45 @@
 
 Running list of surprises. Add dated inline notes freely.
 
+## 🔥 Branch off `qa`, not `main`
+
+**Discovered 2026-11-20.** `main` is only used for infra / CI batched work (last entries are all `PF-9` CI conversion). Product feature PRs merge **directly to `qa`** on this repo. Branching from `main` picks up every main-only commit your feature doesn't own and makes the PR diff against `qa` look like 171 files / 15k lines when the real change is ~10 files.
+
+`qa` is ahead of `main` by ~100 commits at any given time. Check `git log --oneline origin/qa ^origin/main` to see the divergence yourself.
+
+## 🔥 Deploy workflow is `workflow_dispatch` only + guarded to `qa`
+
+The `.github/workflows/deploy-qa.yml` job starts with:
+
+```yaml
+if [ "${{ github.ref }}" != "refs/heads/qa" ]; then exit 1; fi
+```
+
+So:
+- You must click Run workflow manually (nothing auto-triggers deploy on merge).
+- The branch selector in the GitHub UI must resolve to `qa`. Running from a feature branch or `main` is rejected at step 1 of the job.
+- Merge your PR to `qa` first → then Run workflow.
+
+## 🔥 Alembic migrations are NOT run by the deploy workflow
+
+The deploy only ships the ECS task image. **DevOps runs the migration manually** after deploy: `python scripts/migration_helper.py migrate` against QA MySQL (or the equivalent ECS exec). Without it, any endpoint relying on the new schema will 500 on INSERT.
+
+Flag the migration explicitly in the PR description so DevOps picks it up.
+
+## `commit-lint` CI is a branch-name regex, not commit-message
+
+The job name is misleading. The actual check is:
+
+```
+RX='((FRON|MLE|UC|UG|UL|UO|UPST|ST|SET|IET|UPLEVEL|CP|INV|revert|PF|TA|AA|OG|PDC)-[0-9]+)|qa|staging|main|master|production|migration/.*'
+echo "$BRANCH" | grep -qE "^${RX}$"
+```
+
+Branch must match that regex at the start. `feat/INV-1187-...` fails because of the `feat/` prefix. Name branches `INV-1187-...` (or whichever ticket prefix) directly.
+
+Only BE and FE enforce this; Worker didn't at one point but was added later.
+
+
 ## 🔥 `authentication_user` table is reflected at import time
 
 **Impact: can't import `main` without MySQL that already contains `authentication_user`.** Not created by this repo's migrations — owned by another service.
