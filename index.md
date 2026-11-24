@@ -43,7 +43,7 @@ Catalog. One line per page. Start here.
 - [`tickets/INV-1183.md`](tickets/INV-1183.md) — Tab close: native prompt only (fe-v2 PR #22).
 - [`tickets/INV-1185.md`](tickets/INV-1185.md) — "Before you go" card on focus-leave (fe-v2 PR #22).
 - [`tickets/INV-1186.md`](tickets/INV-1186.md) — End-click confirmation below 25% elapsed (fe-v2 PR #22).
-- [`tickets/INV-1187.md`](tickets/INV-1187.md) — PDC-490 hint feature: all code on `qa` (FE / Worker / BE); Langfuse prompt seeded; demo-day blocker on upstream report-generation pipeline (not ours).
+- [`tickets/INV-1187.md`](tickets/INV-1187.md) — **DONE** · PDC-490 hint feature: candidate-picks picker, score penalty subtracted at report time, consolidated release PRs open (FE #43 → main, BE #59 → production, Worker #33 → main).
 
 ## Operational
 
