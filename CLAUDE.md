@@ -38,11 +38,11 @@ Four triggers. All of them fire the same update cycle. No cron, no background jo
 ## Lint
 
 - **Opportunistic (do this yourself, no asking):** if while updating a page you spot a contradiction with another page, a stale date, or a broken wikilink, fix it in the same cycle and add a `lint |` line to `log.md`.
-- **Deep (`/wiki-lint` command from the user):** whole-wiki pass — contradictions across pages, orphan pages, broken links, stale dates. **Model: Opus 4.8 at medium.** Report findings, fix what's safe, flag what needs the user's call.
+- **Deep (`/wiki-lint` command from the user):** whole-wiki pass — contradictions across pages, orphan pages, broken links, stale dates. **Model: Opus 4.7 at low (default).** Report findings, fix what's safe, flag what needs the user's call.
 
 ## Push authorization (scoped exception)
 
-The global rule in `~/.claude/CLAUDE.md` is "ask before pushing." **This repo is the single named exception.** The user has explicitly authorized auto-commit + auto-push to `IK-wiki@main` by the wiki update cycle. This exception does **not** extend to any other repository under `~/Desktop/IK/code/` — those still require explicit authorization per the global rules.
+The global push rule in `~/.claude/CLAUDE.md` (rule 6) requires approval before any push unless the prompt names the push. **This repo is the single named exception for the wiki update cycle.** The user has explicitly authorized auto-commit + auto-push to `IK-wiki@main` by the wiki update cycle. This exception does **not** extend to any other repository under `~/Desktop/IK/code/` — those still require explicit authorization per the global rules.
 
 Never force-push. Never rewrite history. Only `main`.
 

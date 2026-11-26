@@ -18,6 +18,23 @@ LLM observability + prompt management. Used by IK AI products to trace OpenAI ca
 - Observability must be **non-blocking + failure-tolerant**: Langfuse down → lose visibility, never the user's request.
 - `release` set to the git SHA on client init.
 
+## Langfuse MCP (Claude Code)
+
+Working package: **`langfuse-mcp`** (npm, by hugoles). `@langfuse/mcp-server-langfuse` **does not exist** — that guess returns `CONNECTION_CLOSED`. Keys are **per Langfuse project**; swap them when switching between CareerOps / Resume Analyzer / Mock Interview.
+
+```bash
+claude mcp remove langfuse -s user
+claude mcp add langfuse -s user -t stdio \
+  -e LANGFUSE_PUBLIC_KEY=pk-lf-xxxx \
+  -e LANGFUSE_SECRET_KEY=sk-lf-xxxx \
+  -e LANGFUSE_BASE_URL=https://us.cloud.langfuse.com \
+  -- npx -y langfuse-mcp
+```
+
+Project IDs: Resume Analyzer `cmuwtkyky002mad0czrt8kgwx`, Mock Interview `cmw4mh4gj01ccad0eijorz95b`, CareerOps TBD. Fallback package: `@therealsachin/langfuse-mcp`. Restart Claude Code after the add.
+
+**Deprecated endpoint note (watch):** v1 `/api/public/traces` was removed 2026-11-16. MCP tools like `listTraces` on Langfuse v3 Cloud return 410. Use v2 observations (`/api/public/v2/observations`) — some MCP packages may need an update.
+
 ## Env vars (names only — values never in this wiki)
 
 | Var | Purpose |
