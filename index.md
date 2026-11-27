@@ -16,6 +16,7 @@ Catalog. One line per page. Start here.
 
 - [`workflows/release-flow.md`](workflows/release-flow.md) — QA-first release flow, branch-base rule, CI gate, Jira mapping.
 - [`workflows/story-pointing.md`](workflows/story-pointing.md) — Story pointing guide (0.25–3 SP). Source: Confluence PM.
+- [`workflows/automation-gate.md`](workflows/automation-gate.md) — The rebase trap: green MR to `main` blocked by E2E gate; why SHAs change on rebase; how to re-promote through staging.
 
 ## Services
 
