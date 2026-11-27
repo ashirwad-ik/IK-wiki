@@ -53,3 +53,4 @@ Verbs: `seed`, `learn`, `fix`, `lint`, `rename`, `archive`.
 ## [2026-11-26] learn | langfuse | MCP add command (langfuse-mcp pkg); v1 traces endpoint 410 after 2026-11-16
 ## [2026-11-27] learn | workflow | automation gate — rebase changes SHA; gate re-promote through staging to unblock main merge
 ## [2026-11-27] learn | CLAUDE.md | no chat-session labels (SP1/SP2 etc.) in PRs, commits, Confluence, Jira, Slack
+## [2026-11-27] learn | services/langfuse + tickets/INV-1073 | full Langfuse implementation playbook (per-product user_id rules, OpenAI drop-in trap, SSM→ECS task-def gotcha, media-upload masking, chat prompts, one project + env+label split); CareerOps tracing code on staging awaiting task-def wiring
